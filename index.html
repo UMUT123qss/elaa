@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One Wish 🌙</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    font-family: Georgia, serif;
+    background: radial-gradient(circle at center, #25204b, #090817 70%);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stars {
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(white 1px, transparent 1px),
+        radial-gradient(white 1px, transparent 1px);
+    background-size: 90px 90px, 140px 140px;
+    background-position: 20px 30px, 70px 90px;
+    opacity: .35;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    width: 650px;
+}
+
+h1 {
+    font-size: 42px;
+    margin-bottom: 15px;
+    text-shadow: 0 0 20px #d9b8ff;
+}
+
+p {
+    font-size: 20px;
+    opacity: .85;
+}
+
+input {
+    width: 450px;
+    padding: 17px 20px;
+    border: none;
+    outline: none;
+    border-radius: 30px;
+    background: rgba(255,255,255,.12);
+    color: white;
+    font-size: 17px;
+    text-align: center;
+    box-shadow: 0 0 25px rgba(180,130,255,.2);
+}
+
+input::placeholder {
+    color: rgba(255,255,255,.55);
+}
+
+button {
+    display: block;
+    margin: 20px auto;
+    padding: 14px 35px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #b58cff, #e3b5ff);
+    color: #180d27;
+    font-size: 17px;
+    cursor: pointer;
+    transition: .3s;
+    font-weight: bold;
+}
+
+button:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 25px #c99cff;
+}
+
+/* DİLEK EKRANI */
+
+#wishScreen {
+    transition: .7s;
+}
+
+#branchScreen {
+    display: none;
+    animation: appear 1.5s ease;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: scale(.7);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* DAL */
+
+.branch {
+    position: relative;
+    width: 500px;
+    height: 300px;
+    margin: 20px auto;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.branch:hover {
+    transform: scale(1.04) rotate(-1deg);
+}
+
+.wood {
+    position: absolute;
+    width: 430px;
+    height: 24px;
+    background: linear-gradient(#70462e, #3d2418);
+    border-radius: 50%;
+    left: 40px;
+    top: 135px;
+    transform: rotate(-12deg);
+    box-shadow: 0 5px 12px rgba(0,0,0,.5);
+}
+
+.wood:before {
+    content: "";
+    position: absolute;
+    width: 170px;
+    height: 18px;
+    background: #55321f;
+    border-radius: 50%;
+    left: 100px;
+    top: -40px;
+    transform: rotate(38deg);
+}
+
+.wood:after {
+    content: "";
+    position: absolute;
+    width: 130px;
+    height: 16px;
+    background: #4b2c1c;
+    border-radius: 50%;
+    left: 250px;
+    top: 20px;
+    transform: rotate(-40deg);
+}
+
+/* Yapraklar */
+
+.leaf {
+    position: absolute;
+    width: 24px;
+    height: 38px;
+    background: linear-gradient(135deg,#a884ff,#e0b5ff);
+    border-radius: 100% 0 100% 0;
+    box-shadow: 0 0 15px #c49aff;
+}
+
+.l1 { left:100px; top:80px; transform:rotate(-35deg); }
+.l2 { left:170px; top:55px; transform:rotate(20deg); }
+.l3 { left:245px; top:85px; transform:rotate(-20deg); }
+.l4 { left:320px; top:55px; transform:rotate(35deg); }
+.l5 { left:390px; top:95px; transform:rotate(-30deg); }
+
+.wishText {
+    margin-top: 15px;
+    font-size: 18px;
+    opacity: .8;
+}
+
+#finalMessage {
+    display: none;
+    animation: appear 1.5s ease;
+}
+
+#finalMessage h2 {
+    font-size: 38px;
+    text-shadow: 0 0 25px #d6a7ff;
+}
+
+#finalMessage p {
+    line-height: 1.7;
+}
+
+/* KIRILMA PARÇALARI */
+
+.particle {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: #cba0ff;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: fly 1.2s forwards;
+}
+
+@keyframes fly {
+    to {
+        transform: translate(var(--x), var(--y)) scale(0);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="stars"></div>
+
+<div class="container">
+
+    <!-- DİLEK YAZMA -->
+    <div id="wishScreen">
+
+        <h1>🌙 One Wish</h1>
+
+        <p>
+            Gözlerini kapat ve bir dilek tut...
+        </p>
+
+        <p>
+            Sonra dileğini buraya yaz ✨
+        </p>
+
+        <input
+            id="wishInput"
+            type="text"
+            placeholder="Dileğini buraya yaz..."
+        >
+
+        <button onclick="makeWish()">
+            Dileğimi Tut ✨
+        </button>
+
+    </div>
+
+
+    <!-- DAL -->
+    <div id="branchScreen">
+
+        <h1>🌿 Dileğin hazır</h1>
+
+        <p>
+            Dileğini kalbinde tut...
+        </p>
+
+        <div class="branch" onclick="breakBranch()">
+
+            <div class="wood"></div>
+
+            <div class="leaf l1"></div>
+            <div class="leaf l2"></div>
+            <div class="leaf l3"></div>
+            <div class="leaf l4"></div>
+            <div class="leaf l5"></div>
+
+        </div>
+
+        <div class="wishText">
+            Dileğini gerçekleştirmek için dala tıkla ✨
+        </div>
+
+    </div>
+
+
+    <!-- SON -->
+    <div id="finalMessage">
+
+        <h2>✨ Dileğin gökyüzüne ulaştı</h2>
+
+        <p>
+            Bazı dilekler sadece tutulmaz...<br>
+            Kalpten gerçekten istendiğinde gerçekleşmesi için<br>
+            bir umut bırakılır. 🌙
+        </p>
+
+        <p>
+            <b>Umarım senin dileğin de gerçekleşir. ❤️</b>
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function makeWish() {
+
+    const input = document.getElementById("wishInput");
+
+    if (input.value.trim() === "") {
+        alert("Önce bir dilek tutmalısın ✨");
+        return;
+    }
+
+    document.getElementById("wishScreen").style.display = "none";
+
+    document.getElementById("branchScreen").style.display = "block";
+}
+
+
+function breakBranch() {
+
+    const branch = document.querySelector(".branch");
+
+    const rect = branch.getBoundingClientRect();
+
+    // Parçacıklar
+    for (let i = 0; i < 35; i++) {
+
+        const particle = document.createElement("div");
+
+        particle.className = "particle";
+
+        particle.style.left =
+            (rect.left + rect.width / 2) + "px";
+
+        particle.style.top =
+            (rect.top + rect.height / 2) + "px";
+
+        particle.style.setProperty(
+            "--x",
+            (Math.random() * 500 - 250) + "px"
+        );
+
+        particle.style.setProperty(
+            "--y",
+            (Math.random() * 400 - 200) + "px"
+        );
+
+        document.body.appendChild(particle);
+
+        setTimeout(() => {
+            particle.remove();
+        }, 1300);
+    }
+
+    // Dal kırılma animasyonu
+    branch.style.transition = "1s";
+    branch.style.transform = "rotate(25deg) scale(.7)";
+    branch.style.opacity = "0";
+
+    setTimeout(() => {
+
+        document.getElementById("branchScreen").style.display = "none";
+
+        document.getElementById("finalMessage").style.display = "block";
+
+    }, 1000);
+}
+
+</script>
+
+</body>
+</html>
